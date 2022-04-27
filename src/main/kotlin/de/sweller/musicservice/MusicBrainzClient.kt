@@ -12,7 +12,7 @@ class MusicBrainzClient(
 ) {
     fun getArtistInfo(mbid: String): Mono<MusicBrainzResponse> {
         return webClient.get()
-            .uri("${baseUrl}/artist/${mbid}?fmt=json")
+            .uri("${baseUrl}/artist/${mbid}?fmt=json&inc=url-rels+release-groups")
             .retrieve()
             .bodyToMono(MusicBrainzResponse::class.java)
     }
@@ -24,4 +24,15 @@ data class MusicBrainzResponse(
     val gender: String?,
     val country: String?,
     val disambiguation: String?,
+    val relations: List<MusicBrainzRelation>
+)
+
+data class MusicBrainzRelation(
+    val type: String,
+    val url: MusicBrainzRelationUrl
+)
+
+data class MusicBrainzRelationUrl(
+    val resource: String,
+    val id: String,
 )

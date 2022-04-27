@@ -24,7 +24,7 @@ internal class ControllerTest {
     @Test
     fun getArtist() {
         stubFor(
-            get("/artist/f27ec8db-af05-4f36-916e-3d57f91ecf5e?fmt=json").willReturn(
+            get("/artist/f27ec8db-af05-4f36-916e-3d57f91ecf5e?fmt=json&inc=url-rels+release-groups").willReturn(
                 aResponse()
                     .withStatus(200)
                     .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
@@ -38,7 +38,8 @@ internal class ControllerTest {
                 "name": "Michael Jackson",
                 "gender": "Male",
                 "country": "US",
-                "disambiguation": "“King of Pop”"
+                "disambiguation": "“King of Pop”",
+                "wiki": "https://www.wikidata.org/wiki/Q2831"
             }
         """.trimIndent()
 

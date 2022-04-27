@@ -21,6 +21,7 @@ data class DetailsResponse(
     val gender: String?,
     val country: String?,
     val disambiguation: String?,
+    val wiki: String,
 ) {
     companion object {
         fun of(musicBrainzResponse: MusicBrainzResponse): DetailsResponse {
@@ -30,6 +31,7 @@ data class DetailsResponse(
                 musicBrainzResponse.gender,
                 musicBrainzResponse.country,
                 musicBrainzResponse.disambiguation,
+                musicBrainzResponse.relations.first { it.type == "wikidata" }.url.resource
             )
         }
     }
