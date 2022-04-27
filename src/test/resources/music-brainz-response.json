@@ -1,0 +1,66 @@
+{
+  "id": "f27ec8db-af05-4f36-916e-3d57f91ecf5e",
+  "disambiguation": "“King of Pop”",
+  "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+  "name": "Michael Jackson",
+  "end_area": {
+    "id": "1f40c6e1-47ba-4e35-996f-fe6ee5840e62",
+    "disambiguation": "",
+    "sort-name": "Los Angeles",
+    "type-id": null,
+    "type": null,
+    "name": "Los Angeles"
+  },
+  "end-area": {
+    "id": "1f40c6e1-47ba-4e35-996f-fe6ee5840e62",
+    "disambiguation": "",
+    "sort-name": "Los Angeles",
+    "type-id": null,
+    "type": null,
+    "name": "Los Angeles"
+  },
+  "isnis": [
+    "000000011023081X"
+  ],
+  "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+  "area": {
+    "id": "489ce91b-6658-3307-9877-795b68554c98",
+    "disambiguation": "",
+    "sort-name": "United States",
+    "type": null,
+    "type-id": null,
+    "name": "United States",
+    "iso-3166-1-codes": [
+      "US"
+    ]
+  },
+  "ipis": [
+    "00002961801",
+    "00523553664"
+  ],
+  "begin-area": {
+    "id": "34357067-8f7f-4c7a-8d5e-99b6e60f7891",
+    "sort-name": "Gary",
+    "disambiguation": "",
+    "type-id": null,
+    "type": null,
+    "name": "Gary"
+  },
+  "country": "US",
+  "sort-name": "Jackson, Michael",
+  "life-span": {
+    "begin": "1958-08-29",
+    "ended": true,
+    "end": "2009-06-25"
+  },
+  "type": "Person",
+  "gender": "Male",
+  "begin_area": {
+    "id": "34357067-8f7f-4c7a-8d5e-99b6e60f7891",
+    "sort-name": "Gary",
+    "disambiguation": "",
+    "type-id": null,
+    "type": null,
+    "name": "Gary"
+  }
+}
