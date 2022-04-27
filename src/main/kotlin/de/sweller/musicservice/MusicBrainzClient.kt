@@ -25,7 +25,10 @@ data class MusicBrainzResponse(
     val country: String?,
     val disambiguation: String?,
     val relations: List<MusicBrainzRelation>
-)
+) {
+    val wikidataEntityId: String
+        get() = relations.first { it.type == "wikidata" }.url.resource.substringAfterLast("/")
+}
 
 data class MusicBrainzRelation(
     val type: String,

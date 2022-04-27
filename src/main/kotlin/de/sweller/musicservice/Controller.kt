@@ -7,11 +7,19 @@ import reactor.core.publisher.Mono
 
 @RestController
 class Controller(
-    val client: MusicBrainzClient
+    val musicBrainzClient: MusicBrainzClient,
+    val wikidataClient: WikidataClient,
 ) {
     @GetMapping("/musify/music-artist/details/{mbid}")
     fun getArtist(@PathVariable mbid: String): Mono<DetailsResponse> {
-        return client.getArtistInfo(mbid).map { DetailsResponse.of(it) }
+        return musicBrainzClient
+            .getArtistInfo(mbid)
+            .flatMap { musicBrainzResponse ->
+                wikidataClient.getSiteLinkTitle(musicBrainzResponse.wikidataEntityId)
+                    .map {
+                        DetailsResponse.of(musicBrainzResponse, it)
+                    }
+            }
     }
 }
 
@@ -21,17 +29,17 @@ data class DetailsResponse(
     val gender: String?,
     val country: String?,
     val disambiguation: String?,
-    val wiki: String,
+    val wikiTitle: String?,
 ) {
     companion object {
-        fun of(musicBrainzResponse: MusicBrainzResponse): DetailsResponse {
+        fun of(musicBrainzResponse: MusicBrainzResponse, siteLinkTitle: String?): DetailsResponse {
             return DetailsResponse(
                 musicBrainzResponse.id,
                 musicBrainzResponse.name,
                 musicBrainzResponse.gender,
                 musicBrainzResponse.country,
                 musicBrainzResponse.disambiguation,
-                musicBrainzResponse.relations.first { it.type == "wikidata" }.url.resource
+                siteLinkTitle
             )
         }
     }
