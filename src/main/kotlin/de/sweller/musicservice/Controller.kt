@@ -3,7 +3,6 @@ package de.sweller.musicservice
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RestController
-import reactor.core.publisher.Mono
 
 @RestController
 class Controller(
@@ -12,17 +11,11 @@ class Controller(
     val wikipediaClient: WikipediaClient,
 ) {
     @GetMapping("/musify/music-artist/details/{mbid}")
-    fun getArtist(@PathVariable mbid: String): Mono<DetailsResponse> {
-        return musicBrainzClient
-            .getArtistInfo(mbid)
-            .flatMap { musicBrainzResponse ->
-                wikidataClient.getSiteLinkTitle(musicBrainzResponse.wikidataEntityId)
-                    .flatMap {
-                        wikipediaClient.getDescription(it ?: "").map { description ->
-                            DetailsResponse.of(musicBrainzResponse, description)
-                        }
-                    }
-            }
+    suspend fun getArtist(@PathVariable mbid: String): DetailsResponse {
+        val musicBrainzResponse = musicBrainzClient.getArtistInfo(mbid)
+        val siteLinkTitle = wikidataClient.getSiteLinkTitle(musicBrainzResponse.wikidataEntityId)
+        val description = siteLinkTitle?.let { wikipediaClient.getDescription(siteLinkTitle) }
+        return DetailsResponse.of(musicBrainzResponse, description)
     }
 }
 

@@ -3,18 +3,19 @@ package de.sweller.musicservice
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
-import reactor.core.publisher.Mono
+import org.springframework.web.reactive.function.client.awaitBody
 
 @Service
 class MusicBrainzClient(
     private val webClient: WebClient,
     @Value("\${app.music-brainz.baseurl}") val baseUrl: String,
 ) {
-    fun getArtistInfo(mbid: String): Mono<MusicBrainzResponse> {
+    suspend fun getArtistInfo(mbid: String): MusicBrainzResponse {
         return webClient.get()
             .uri("${baseUrl}/artist/${mbid}?fmt=json&inc=url-rels+release-groups")
             .retrieve()
-            .bodyToMono(MusicBrainzResponse::class.java)
+            .awaitBody()
+
     }
 }
 
