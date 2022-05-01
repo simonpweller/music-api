@@ -1,5 +1,6 @@
 package de.sweller.musicservice
 
+import com.fasterxml.jackson.annotation.JsonAlias
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
@@ -15,7 +16,6 @@ class MusicBrainzClient(
             .uri("${baseUrl}/artist/${mbid}?fmt=json&inc=url-rels+release-groups")
             .retrieve()
             .awaitBody()
-
     }
 }
 
@@ -25,18 +25,26 @@ data class MusicBrainzResponse(
     val gender: String?,
     val country: String?,
     val disambiguation: String?,
-    val relations: List<MusicBrainzRelation>
+    val relations: List<MusicBrainzRelation>,
+    @JsonAlias("release-groups")
+    val releaseGroups: List<ReleaseGroup>
 ) {
     val wikidataEntityId: String
         get() = relations.first { it.type == "wikidata" }.url.resource.substringAfterLast("/")
+
+    data class MusicBrainzRelation(
+        val type: String,
+        val url: MusicBrainzRelationUrl
+    ) {
+
+        data class MusicBrainzRelationUrl(
+            val resource: String,
+            val id: String,
+        )
+    }
+
+    data class ReleaseGroup(
+        val id: String,
+        val title: String,
+    )
 }
-
-data class MusicBrainzRelation(
-    val type: String,
-    val url: MusicBrainzRelationUrl
-)
-
-data class MusicBrainzRelationUrl(
-    val resource: String,
-    val id: String,
-)
