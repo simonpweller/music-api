@@ -12,14 +12,19 @@ class CoverArtArchiveClient(
     @Value("\${app.cover-art-archive.baseurl}") val baseUrl: String,
 ) {
     suspend fun getImageUrl(mbid: String): String? {
-        return webClient.get()
-            .uri("${baseUrl}/release-group/${mbid}")
-            .accept(MediaType.APPLICATION_JSON, MediaType.TEXT_HTML)
-            .retrieve()
-            .awaitBody<CoverArtArchiveResponse>()
-            .images
-            .firstOrNull { it.front }
-            ?.image
+        return try {
+            val image = webClient.get()
+                .uri("${baseUrl}/release-group/${mbid}")
+                .accept(MediaType.APPLICATION_JSON, MediaType.TEXT_HTML)
+                .retrieve()
+                .awaitBody<CoverArtArchiveResponse>()
+                .images
+                .firstOrNull { it.front }
+                ?.image
+            image
+        } catch (e: Exception) {
+            null
+        }
     }
 }
 
