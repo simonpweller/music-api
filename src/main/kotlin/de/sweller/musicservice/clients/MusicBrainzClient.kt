@@ -1,4 +1,4 @@
-package de.sweller.musicservice
+package de.sweller.musicservice.clients
 
 import com.fasterxml.jackson.annotation.JsonAlias
 import org.springframework.beans.factory.annotation.Value

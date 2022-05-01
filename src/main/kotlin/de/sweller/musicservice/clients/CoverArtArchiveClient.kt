@@ -1,4 +1,4 @@
-package de.sweller.musicservice
+package de.sweller.musicservice.clients
 
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.MediaType
