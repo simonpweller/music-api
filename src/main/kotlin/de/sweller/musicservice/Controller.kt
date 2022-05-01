@@ -3,6 +3,8 @@ package de.sweller.musicservice
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withPermit
 import kotlinx.coroutines.withContext
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -31,10 +33,14 @@ class Controller(
     }
 
     private suspend fun getAlbumCoverMap(musicBrainzResponse: MusicBrainzResponse): Map<String, String?> {
+        val requestSemaphore = Semaphore(5)
+
         return withContext(Dispatchers.IO) {
             musicBrainzResponse.releaseGroups.map {
                 async {
-                    it.id to coverArtArchiveClient.getImageUrl(it.id)
+                    it.id to requestSemaphore.withPermit {
+                        coverArtArchiveClient.getImageUrl(it.id)
+                    }
                 }
             }.awaitAll().toMap()
         }
